@@ -1,5 +1,7 @@
 #!/bin/bash -v
 
+sudo yum install -y git 
+
 aws configure set default.region us-east-1
 a=`aws rds describe-db-instances  --query 'DBInstances[*].["Endpoint"."Address"]' | grep rds`
 newdb=`echo $a | sed 's/^.\(.*\).$/\1/'`
