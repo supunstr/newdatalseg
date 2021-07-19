@@ -165,7 +165,7 @@ resource "aws_launch_template" "prod_web_template" {
   image_id               = "ami-0c4dde37857acb780"
   vpc_security_group_ids = [aws_security_group.prod_web.id]
   key_name               = "test"
-  user_data              = filebase64("user-data.sh")
+  user_data              = filebase64("user_data.sh")
   iam_instance_profile {
     arn = aws_iam_instance_profile.test_profile.arn
   }
