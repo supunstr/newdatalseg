@@ -6,7 +6,7 @@ olddb=`cat /var/www/html/drupal/sites/default/settings.php | grep rds.amazonaws.
 newdb="'database-1.cietke0hg61z.us-east-1.rds.amazonaws.com',"
 sudo sed -i "s/$olddb/$newdb/g" /var/www/html/drupal/sites/default/settings.php
 
-sudo newdatalseg/drupal.conf /etc/httpd/conf.d/drupal.conf
+sudo cp newdatalseg/drupal.conf /etc/httpd/conf.d/drupal.conf
 sudo chown -R apache:apache  /var/www/html/
 
 sudo systemctl restart httpd
