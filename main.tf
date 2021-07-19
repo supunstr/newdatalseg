@@ -32,28 +32,28 @@ resource "aws_security_group" "prod_web" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [ "0.0.0.0/0" ]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [ "0.0.0.0/0" ]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [ "0.0.0.0/0" ]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = [ "0.0.0.0/0" ]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -66,13 +66,13 @@ resource "aws_security_group" "prod_db" {
   description = "Allow DB port inbound and from EC2"
 
   ingress {
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    security_groups = [ aws_security_group.prod_web.id ]
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.prod_web.id]
   }
 
-    egress {
+  egress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
@@ -92,15 +92,15 @@ resource "aws_iam_role_policy" "test_policy" {
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
   policy = jsonencode({
-   "Version":"2012-10-17",
-   "Statement":[
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-         "Sid":"AllowRDSDescribe",
-         "Effect":"Allow",
-         "Action":"rds:Describe*",
-         "Resource":"*"
+        "Sid" : "AllowRDSDescribe",
+        "Effect" : "Allow",
+        "Action" : "rds:Describe*",
+        "Resource" : "*"
       }
-   ]
+    ]
   })
 }
 
@@ -122,6 +122,11 @@ resource "aws_iam_role" "test_role" {
   })
 }
 
+resource "aws_iam_instance_profile" "test_profile" {
+  name = "test_profile"
+  role = aws_iam_role.test_role.name
+}
+
 #Creating Mysql DB enabeling Multi Availability zones
 #resource "aws_rds_cluster" "prod-db" {
 #  cluster_identifier      = "aurora-cluster-prod"
@@ -140,7 +145,7 @@ resource "aws_iam_role" "test_role" {
 # Creating ELB
 resource "aws_elb" "prod_web_elb" {
   name            = "prod-web-elb"
-  subnets         =  [ aws_default_subnet.default_az1.id,aws_default_subnet.default_az2.id ]
+  subnets         = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id]
   security_groups = [aws_security_group.prod_web.id]
 
   listener {
@@ -157,11 +162,13 @@ resource "aws_elb" "prod_web_elb" {
 # Creating AutoScaling template
 resource "aws_launch_template" "prod_web_template" {
   name_prefix            = "prod-web-template"
-  image_id               = 	"ami-0d0780a2b45be47aa"
+  image_id               = "ami-0c4dde37857acb780"
   vpc_security_group_ids = [aws_security_group.prod_web.id]
-  key_name = "test"
-  #iam_instance_profile = aws_iam_role.test_role.name
-  user_data = filebase64("user-data.sh")
+  key_name               = "test"
+  user_data              = filebase64("user-data.sh")
+  iam_instance_profile {
+    arn = aws_iam_instance_profile.test_profile.arn
+  }
 
   instance_type = "t2.micro"
 
@@ -171,7 +178,7 @@ resource "aws_launch_template" "prod_web_template" {
 }
 
 resource "aws_autoscaling_group" "prod_group" {
-  vpc_zone_identifier = [ aws_default_subnet.default_az1.id,aws_default_subnet.default_az2.id ]
+  vpc_zone_identifier = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id]
   desired_capacity    = 2
   max_size            = 3
   min_size            = 1
