@@ -141,6 +141,18 @@ resource "aws_iam_instance_profile" "test_profile" {
 #  vpc_security_group_ids = [ aws_security_group.prod_db.id ]
 #}
 
+resource "aws_db_instance" "default" {
+  allocated_storage    = 10
+  engine               = "mysql"
+  engine_version       = "8.0.23"
+  instance_class       = "db.t2.micro"
+  name                 = "database1"
+  username             = "admin"
+  password             = "Admin1234"
+  #security_group_names =   [aws_security_group.prod.db]
+  skip_final_snapshot  = true
+}
+
 
 # Creating ELB
 resource "aws_elb" "prod_web_elb" {
@@ -162,7 +174,7 @@ resource "aws_elb" "prod_web_elb" {
 # Creating AutoScaling template
 resource "aws_launch_template" "prod_web_template" {
   name_prefix            = "prod-web-template"
-  image_id               = "ami-0c4dde37857acb780"
+  image_id               = "ami-0d6eae25fcdb66e19"
   vpc_security_group_ids = [aws_security_group.prod_web.id]
   key_name               = "test"
   user_data              = filebase64("user_data.sh")
@@ -171,6 +183,9 @@ resource "aws_launch_template" "prod_web_template" {
   }
 
   instance_type = "t2.micro"
+
+ depends_on = [ aws_db_instance.default ]
+
 
   tags = {
     Name : "production"
