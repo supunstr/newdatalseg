@@ -21,6 +21,8 @@ Terraform apply
 ## Note
 In here I'm not use varialble files. I'll update it in future
 
+terraform build output 
+
 ```sh
 PS C:\Users\supun\OneDrive\Desktop\lseg\newdatalseg> terraform.exe init 
 
