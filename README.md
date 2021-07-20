@@ -9,7 +9,7 @@ Before you RUN the main.tf below steps you need to follow,
 
 Create key name test
 Create own image using pre-image-input file base on the rhel8/7 server.
-Then update the Image ID on main.tf file..
+Then update the Image ID on main.tf file.
 
 ```sh
 git clone https://github.com/supunstr/newdatalseg.git
