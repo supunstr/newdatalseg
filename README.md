@@ -6,3 +6,13 @@ Build Drupal WebSite
 ## Instructions
 
 Before you RUN the main.tf, Create own image using pre-image-input file base on the rhel8/7 server.
+Then update the Image ID on main.tf file.
+
+```sh
+git clone https://github.com/supunstr/newdatalseg.git
+Terraform init 
+Terraform plan
+Terraform apply 
+```
+## Note
+In here I'm not use varialble files. I'll update it future
