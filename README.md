@@ -10,6 +10,8 @@ Before you RUN the main.tf below steps you need to follow,
 - Create own image using pre-image-input file base on the rhel8/7 server.
 - Then update the Image ID on main.tf file.
 
+You can user below commands to built this application
+
 ```sh
 git clone https://github.com/supunstr/newdatalseg.git
 Terraform init 
