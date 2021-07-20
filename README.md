@@ -7,7 +7,7 @@ Build Drupal WebSite
 
 Before you RUN the main.tf below steps you need to follow,
 
-Create key as test
+Create key as test.
 Create own imange using pre-image-input file base on the rhel7/8 server.
 Then update the Image ID on main.tf file.
 
