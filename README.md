@@ -18,4 +18,4 @@ Terraform plan
 Terraform apply 
 ```
 ## Note
-In here I'm not use varialble files. I'll update it future
+In here I'm not use varialble files. I'll update it in future
